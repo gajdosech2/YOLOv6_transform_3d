@@ -48,12 +48,12 @@ def load_test_videos(root_dir_video_path: str, root_dir_results_path: str):
     calib_list = []
     store_results_list = []
     road_mask_list = []
-    for i in range(4, 7):
+    for i in range(0, 1):
         dir_list = ['session{}_center'.format(i), 'session{}_left'.format(i), 'session{}_right'.format(i)]
         vid_list.extend([os.path.join(root_dir_video_path, d, 'video.avi') for d in dir_list])
         road_mask_list.extend([os.path.join(root_dir_video_path, d, 'video_mask.png') for d in dir_list])
         calib_list.extend(
-            [os.path.join(root_dir_results_path, d, 'system_SochorCVIU_Edgelets_BBScale_Reg.json') for d in dir_list])
+            [os.path.join(root_dir_results_path, d, 'system_SochorCVIU_Edgelets_ManualScale.json') for d in dir_list])
         store_results_list.extend([os.path.join(root_dir_results_path, d) for d in dir_list])
     return vid_list, calib_list, store_results_list, road_mask_list
 

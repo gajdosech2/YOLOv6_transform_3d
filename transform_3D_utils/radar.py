@@ -15,7 +15,7 @@ class Radar:
     def __init__(self,
                  transform_matrix: np.ndarray,
                  inv_transform_matrix: np.ndarray,
-                 vanishing_points: list[np.ndarray],
+                 vanishing_points,
                  vp0_t: np.ndarray,
                  image_size: tuple,
                  projector,
@@ -36,7 +36,7 @@ class Radar:
         self.video_fps = video_fps
         self.write_path = os.path.join(result_path, "system_" + result_name + '.json')
 
-        self.trackers: list[Tracker] = []
+        self.trackers = []
         self.last_id = 0
         self.frame = 0
         # with open("", 'r+') as file:

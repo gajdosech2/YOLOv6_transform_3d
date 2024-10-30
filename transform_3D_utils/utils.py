@@ -38,7 +38,7 @@ def get_focal_length(vp1, vp2, pp):
 
 
 def compute_camera_calibration(
-        vanishing_points: list[list], perspective_point: np.array
+        vanishing_points, perspective_point: np.array
 ):
     focal = get_focal_length(
         np.asarray(vanishing_points[0]),
