@@ -29,7 +29,7 @@ def get_args_parser(add_help=True):
     parser.add_argument('--iou-thres', type=float, default=0.65, help='NMS IoU threshold for inference.')
     parser.add_argument('--half', action='store_true',
                         help='whether to use FP16 half-precision inference.')
-    parser.add_argument('--show-video', type=bool, default='Show video of inference with 3D bouding boxes.')
+    parser.add_argument('--show-video', action='store_true', help='Show video of inference with 3D bouding boxes.')
     parser.add_argument('--video-fps', type=int, default=50, help='Video FPS')
     parser.add_argument('--test-name', type=str, default='yolov6_3d_qarepvgg_23', help='Test name')
     parser.add_argument('--result-dir', type=str, default='', help='Result directory')
@@ -214,5 +214,8 @@ if __name__ == "__main__":
                             args.img_size,
                             store_results_path,
                             args.test_name,
-                            args.processing_batch)
+                            args.show_video,
+                            args.processing_batch,
+                            args.video_fps,
+                            args.iou_thres)
         print("Finished. Processing time: {}".format(time.time() - start_processing))
