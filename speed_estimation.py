@@ -169,7 +169,7 @@ def batch_process_video(inferer: Inferer,
                 e_stop.set()
                 break
             for i, (frame, box, f) in enumerate(zip(frames, bbox_2d, fub)):
-                cv2.imwrite('calib_data/frame' + str(time.time()).replace('.', '') + ".jpg", frame)
+                #cv2.imwrite('calib_data/frame' + str(time.time()).replace('.', '') + ".jpg", frame)
                 image_b = radar.process_frame(box, f, frame)
                 if show_video:
                     cv2.imshow('frame', image_b)
