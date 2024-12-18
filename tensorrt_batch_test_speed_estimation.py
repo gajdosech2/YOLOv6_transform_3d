@@ -32,6 +32,7 @@ def get_args_parser(add_help=True):
     parser.add_argument('--road-mask-path', type=str, help='Path to road mask')
     parser.add_argument('--process-offline', type=bool, default=False,
                         help='Process video offline, output will be save just in the json file')
+    parser.add_argument('--show-video', action='store_true', help='Show video of inference with 3D bouding boxes.')
     parser.add_argument('--video-fps', type=int, default=50, help='Video FPS')
     parser.add_argument('--test-name', type=str, default='yolov6_3d_qarepvgg_23', help='Test name')
     parser.add_argument('--result-dir', type=str, default='', help='Result directory')
@@ -54,6 +55,7 @@ def batch_test_video(trt_inferer: TrtInferer,
                      test_name: str,
                      batch_size_processing: int = 32,
                      video_fps: int = 50,
+                     show_video: bool = False
                      ):
     avg_fps = []
     im_w, im_h = img_size
@@ -153,9 +155,10 @@ def batch_test_video(trt_inferer: TrtInferer,
                 break
             for i, (frame, box, f) in enumerate(zip(frames, bbox_2d, fub)):
                 image_b = radar.process_frame(box, f, frame)
-                cv2.imshow('frame', image_b)
-                if cv2.waitKey(1) & 0xFF == ord('q'):
-                    e_stop.set()
+                if show_video:
+                    cv2.imshow('frame', image_b)
+                    if cv2.waitKey(1) & 0xFF == ord('q'):
+                        e_stop.set()
 
     reader = Thread(target=read_frames)
     predictor = Thread(target=predict)
@@ -180,8 +183,8 @@ if __name__ == "__main__":
     calib_list = []
     store_results_list = []
     road_mask_list = []
-    video_path = "/home/maco/Documents/BrnoCompSpeed/dataset"
-    results_path = "/home/maco/Documents/BrnoCompSpeed/results"
+    video_path = "/home/photoneo/2016-ITS-BrnoCompSpeed/dataset"
+    results_path = "/home/photoneo/2016-ITS-BrnoCompSpeed/results"
 
     for i in range(4, 7):
         dir_list = ['session{}_center'.format(i), 'session{}_left'.format(i), 'session{}_right'.format(i)]
@@ -204,5 +207,7 @@ if __name__ == "__main__":
                          args.img_size,
                          store_results_path,
                          args.test_name,
-                         args.batch_size_processing)
+                         args.batch_size_processing,
+                         args.video_fps,
+                         args.show_video)
         print("Finished. Processing time: {}".format(time.time() - start_processing))

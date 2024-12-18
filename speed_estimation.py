@@ -22,7 +22,7 @@ def get_args_parser(add_help=True):
     parser = argparse.ArgumentParser(description='Yolov6 3d speed measurement', add_help=add_help)
     parser.add_argument('--tensorrt', action='store_true', help='If model for inference is TensorRT optimized.')
     parser.add_argument('--model_path', type=str, default='weights/yolov6s.pt', help='model path(s) for inference.')
-    parser.add_argument('--yolo-img-size', nargs='+', type=int, default=[488, 640],
+    parser.add_argument('--yolo-img-size', nargs='+', type=int, default=[480, 640],
                         help='the image-size(h,w) in inference size.')
     parser.add_argument('--img-size', nargs='+', type=int, default=[960, 540],
                         help='The image size (h,w) for inference.')
@@ -53,7 +53,7 @@ def load_test_videos(root_dir_video_path: str, root_dir_results_path: str):
         vid_list.extend([os.path.join(root_dir_video_path, d, 'video.avi') for d in dir_list])
         road_mask_list.extend([os.path.join(root_dir_video_path, d, 'video_mask.png') for d in dir_list])
         calib_list.extend(
-            [os.path.join(root_dir_results_path, d, 'system_SochorCVIU_Edgelets_ManualScale.json') for d in dir_list])
+            [os.path.join(root_dir_results_path, d, 'system_SochorCVIU_Edgelets_BBScale_Reg.json') for d in dir_list])
         store_results_list.extend([os.path.join(root_dir_results_path, d) for d in dir_list])
     return vid_list, calib_list, store_results_list, road_mask_list
 

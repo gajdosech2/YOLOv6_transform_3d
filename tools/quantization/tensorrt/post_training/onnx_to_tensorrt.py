@@ -28,6 +28,9 @@ import argparse
 import torch
 import pycuda.autoinit
 import tensorrt as trt
+
+import sys
+sys.path.append("/home/photoneo/YOLOv6_transform_3d")
 #sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
 
 TRT_LOGGER = trt.Logger()
@@ -116,7 +119,7 @@ def main():
     parser = argparse.ArgumentParser(description="Creates a TensorRT engine from the provided ONNX file.\n")
     parser.add_argument("--onnx", required=True, help="The ONNX model file to convert to TensorRT")
     parser.add_argument("-o", "--output", type=str, default="model.engine", help="The path at which to write the engine")
-    parser.add_argument("-b", "--max-batch-size", default=32, type=int, help="The max batch size for the TensorRT engine input")
+    parser.add_argument("-b", "--max-batch-size", default=4, type=int, help="The max batch size for the TensorRT engine input")
     parser.add_argument("-v", "--verbosity", action="count", help="Verbosity for logging. (None) for ERROR, (-v) for INFO/WARNING/ERROR, (-vv) for VERBOSE.")
     parser.add_argument("--explicit-batch", action='store_true', help="Set trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH.")
     parser.add_argument("--explicit-precision", action='store_true', help="Set trt.NetworkDefinitionCreationFlag.EXPLICIT_PRECISION.")
@@ -218,7 +221,7 @@ def main():
         logger.info("Building Engine...")
         with builder.build_serialized_network(network, config) as engine, open(args.output, "wb") as f:
             logger.info("Serializing engine to file: {:}".format(args.output))
-            f.write(engine.serialize())
+            f.write(engine)
 
 
 if __name__ == "__main__":

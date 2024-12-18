@@ -31,7 +31,7 @@ import torch
 from PIL import Image
 
 import sys
-sys.path.append("home/photoneo/YOLOv6_transform_3d")
+sys.path.append("/home/photoneo/YOLOv6_transform_3d")
 from deploy.TensorRT.Processor import letterbox
 
 logging.basicConfig(level=logging.DEBUG,
