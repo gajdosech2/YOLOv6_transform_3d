@@ -63,6 +63,7 @@ def batch_process_video(inferer: Inferer,
                         video_path: str,
                         road_mask_path: str,
                         img_size: tuple,
+                        yolo_img_size: tuple,
                         result_dir: str,
                         test_name: str,
                         show_video: bool = True,
@@ -135,6 +136,12 @@ def batch_process_video(inferer: Inferer,
                 frames.append(frame)
                 image = cv2.bitwise_and(frame, frame, mask=road_mask)
                 t_image = warp_perspective_lambda(image, M, (im_w, im_h))
+
+                latterbox, _ = Inferer.process_image(t_image, yolo_img_size, 32, True)
+                latterbox = latterbox.detach().cpu().numpy() * 255
+                latterbox = latterbox.transpose((1, 2, 0))
+                #cv2.imwrite("/home/photoneo/YOLOv6_transform_3d/calib_data/boxed" + str(time.time()).replace('.', '') + ".jpg", latterbox)
+
                 images.append(t_image)
             q_images.put(images)
             q_frames.put(frames)
@@ -213,6 +220,7 @@ if __name__ == "__main__":
                             vid_path,
                             mask_path,
                             args.img_size,
+                            args.yolo_img_size,
                             store_results_path,
                             args.test_name,
                             args.show_video,
