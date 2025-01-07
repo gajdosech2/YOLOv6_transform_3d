@@ -1,13 +1,12 @@
 import argparse
 import cv2
 import numpy as np
-import time
+import os
 from yolov6.core.inferer import Inferer
 
 import sys
 sys.path.append("/home/photoneo/YOLOv6_transform_3d/")
 
-from speed_estimation import load_test_videos
 from transform_3D_utils.utils import get_calibration_params, compute_camera_calibration, \
     get_transform_matrix_with_criterion
 
@@ -26,9 +25,24 @@ def get_args_parser(add_help=True):
     return args
 
 
+def load_train_videos(root_dir_video_path: str, root_dir_results_path: str):
+    vid_list = []
+    calib_list = []
+    store_results_list = []
+    road_mask_list = []
+    for i in range(0, 4):
+        dir_list = ['session{}_center'.format(i), 'session{}_left'.format(i), 'session{}_right'.format(i)]
+        vid_list.extend([os.path.join(root_dir_video_path, d, 'video.avi') for d in dir_list])
+        road_mask_list.extend([os.path.join(root_dir_video_path, d, 'video_mask.png') for d in dir_list])
+        calib_list.extend(
+            [os.path.join(root_dir_results_path, d, 'system_SochorCVIU_Edgelets_BBScale_Reg.json') for d in dir_list])
+        store_results_list.extend([os.path.join(root_dir_results_path, d) for d in dir_list])
+    return vid_list, calib_list, store_results_list, road_mask_list
+
+
 if __name__ == "__main__":
     args = get_args_parser()
-    vid_list, calib_list, store_results_list, road_mask_list = load_test_videos(args.root_dir_video_path,
+    vid_list, calib_list, store_results_list, road_mask_list = load_train_videos(args.root_dir_video_path,
                                                                                 args.root_dir_results_path)
 
     for vid_path, calib_path, store_results_path, mask_path in zip(vid_list, calib_list, store_results_list,
