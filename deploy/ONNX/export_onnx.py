@@ -20,7 +20,7 @@ from io import BytesIO
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', type=str, default='./yolov6s.pt', help='weights path')
-    parser.add_argument('--img-size', nargs='+', type=int, default=[224, 224],
+    parser.add_argument('--img-size', nargs='+', type=int, default=[480, 480],
                         help='image size, the order is: height width')  # height, width
     parser.add_argument('--batch-size', type=int, default=1, help='batch size')
     parser.add_argument('--half', action='store_true', help='FP16 half-precision export')
@@ -60,8 +60,7 @@ if __name__ == '__main__':
     for k, m in model.named_modules():
         if isinstance(m, Conv):  # assign export-friendly activations
             if isinstance(m.act, nn.SiLU):
-                #m.act = SiLU()
-                m.act = nn.ReLU()
+                m.act = SiLU()
         elif isinstance(m, Detect):
             m.inplace = args.inplace
     dynamic_axes = None

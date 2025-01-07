@@ -120,3 +120,6 @@ venv.bak/
 data/
 .idea/
 bcs_dataset/
+calib_data/
+debug_pt.jpg
+debug_trt.jpg

@@ -136,12 +136,6 @@ def batch_process_video(inferer: Inferer,
                 frames.append(frame)
                 image = cv2.bitwise_and(frame, frame, mask=road_mask)
                 t_image = warp_perspective_lambda(image, M, (im_w, im_h))
-
-                latterbox, _ = Inferer.process_image(t_image, yolo_img_size, 32, True)
-                latterbox = latterbox.detach().cpu().numpy() * 255
-                latterbox = latterbox.transpose((1, 2, 0))
-                #cv2.imwrite("/home/photoneo/YOLOv6_transform_3d/calib_data/boxed" + str(time.time()).replace('.', '') + ".jpg", latterbox)
-
                 images.append(t_image)
             q_images.put(images)
             q_frames.put(frames)
@@ -176,8 +170,8 @@ def batch_process_video(inferer: Inferer,
                 e_stop.set()
                 break
             for i, (frame, box, f) in enumerate(zip(frames, bbox_2d, fub)):
-                #cv2.imwrite('calib_data/frame' + str(time.time()).replace('.', '') + ".jpg", frame)
                 image_b = radar.process_frame(box, f, frame)
+                cv2.imwrite("/home/photoneo/YOLOv6_transform_3d/debug_pt.jpg", image_b)
                 if show_video:
                     cv2.imshow('frame', image_b)
                     if cv2.waitKey(1) & 0xFF == ord('q'):
