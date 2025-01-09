@@ -17,7 +17,7 @@ TIMEOUT = 20
 
 def get_args_parser(add_help=True):
     parser = argparse.ArgumentParser(description='Yolov6 3d speed measurement', add_help=add_help)
-    parser.add_argument('--trt-model', type=str, help='model path(s) for inference.')
+    parser.add_argument('--trt-model', default="/home/photoneo/YOLOv6_transform_3d/bcs_trained_models/qa_small/yolov6_qa_small_3d_transform-int8-32-16-minmax.trt", type=str, help='model path(s) for inference.')
     parser.add_argument('--yolo-img-size', nargs='+', type=int, default=[480, 480],
                         help='the image-size(h,w) in inference size.')
     parser.add_argument('--img-size', nargs='+', type=int, default=[960, 540],

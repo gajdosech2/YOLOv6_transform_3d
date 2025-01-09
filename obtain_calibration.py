@@ -2,6 +2,7 @@ import argparse
 import cv2
 import numpy as np
 import os
+import copy
 from yolov6.core.inferer import Inferer
 
 import sys
@@ -15,8 +16,9 @@ def get_args_parser(add_help=True):
     parser = argparse.ArgumentParser(description='Calibration Data', add_help=add_help)
     parser.add_argument('--root_dir_video_path', type=str, default='/home/photoneo/2016-ITS-BrnoCompSpeed/dataset/',
                         help='Root directory of videos. Where are sessions folders located')
-    parser.add_argument('--root_dir_results_path', type=str, default='/home/photoneo/2016-ITS-BrnoCompSpeed/results/',
+    parser.add_argument('--root_dir_results_path', type=str, default='/home/photoneo/2016-ITS-BrnoCompSpeed/results_viktor/',
                         help='Root directory of results. For each test the directory will be created')
+    parser.add_argument('--model_path', type=str, default='/home/photoneo/YOLOv6_transform_3d/bcs_trained_models/qa_small/yolov6_qa_small_3d_transform.pt', help='model path(s) for inference.')
     parser.add_argument('--img-size', nargs='+', type=int, default=[960, 540],
                         help='The image size (h,w) for inference.')
     parser.add_argument('--yolo-img-size', nargs='+', type=int, default=[480, 480],
@@ -30,12 +32,12 @@ def load_train_videos(root_dir_video_path: str, root_dir_results_path: str):
     calib_list = []
     store_results_list = []
     road_mask_list = []
-    for i in range(0, 4):
+    for i in range(0, 3):
         dir_list = ['session{}_center'.format(i), 'session{}_left'.format(i), 'session{}_right'.format(i)]
         vid_list.extend([os.path.join(root_dir_video_path, d, 'video.avi') for d in dir_list])
         road_mask_list.extend([os.path.join(root_dir_video_path, d, 'video_mask.png') for d in dir_list])
         calib_list.extend(
-            [os.path.join(root_dir_results_path, d, 'system_SochorCVIU_Edgelets_BBScale_Reg.json') for d in dir_list])
+            [os.path.join(root_dir_results_path, d, 'system_SochorCVIU_Edgelets_ManualScale.json') for d in dir_list])
         store_results_list.extend([os.path.join(root_dir_results_path, d) for d in dir_list])
     return vid_list, calib_list, store_results_list, road_mask_list
 
@@ -45,6 +47,9 @@ if __name__ == "__main__":
     vid_list, calib_list, store_results_list, road_mask_list = load_train_videos(args.root_dir_video_path,
                                                                                 args.root_dir_results_path)
 
+    calib_image_count = 0
+    inferer = Inferer(model=args.model_path, yolo_img_size=args.yolo_img_size, half=True)
+    
     for vid_path, calib_path, store_results_path, mask_path in zip(vid_list, calib_list, store_results_list,
                                                                    road_mask_list):
 
@@ -75,8 +80,7 @@ if __name__ == "__main__":
             borderMode=cv2.BORDER_CONSTANT,
         )
 
-        calib_image_count = 0
-        while cap.isOpened() and calib_image_count < 1000:
+        while cap.isOpened() and calib_image_count < 1000000:
             calib_image_count += 1
 
             ret, frame = cap.read()
@@ -89,7 +93,16 @@ if __name__ == "__main__":
 
             image = cv2.bitwise_and(frame, frame, mask=road_mask)
             t_image = warp_perspective_lambda(image, M, (im_w, im_h))
+
+            images = np.stack([copy.deepcopy(t_image)], axis=0)
+            bbox_2d, fub = inferer.simple_inference(images, 0.65, 0.65)
+
             latterbox, _ = Inferer.process_image(t_image, args.yolo_img_size, 32, True)
             latterbox = latterbox.detach().cpu().numpy() * 255
             latterbox = latterbox.transpose((1, 2, 0))
-            cv2.imwrite("/home/photoneo/YOLOv6_transform_3d/calib_data/boxed" + str(calib_image_count) + ".jpg", latterbox)
+
+            if len(bbox_2d[0]) > 0:
+                print(calib_image_count)
+                cv2.imwrite("/home/photoneo/YOLOv6_transform_3d/calib_data/boxed" + str(calib_image_count) + ".jpg", latterbox)
+            else:
+                print("no bbox!")

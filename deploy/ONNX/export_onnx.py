@@ -19,10 +19,10 @@ from io import BytesIO
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--weights', type=str, default='./yolov6s.pt', help='weights path')
+    parser.add_argument('--weights', type=str, default='/home/photoneo/YOLOv6_transform_3d/bcs_trained_models/qa_small/yolov6_qa_small_3d_transform.pt', help='weights path')
     parser.add_argument('--img-size', nargs='+', type=int, default=[480, 480],
                         help='image size, the order is: height width')  # height, width
-    parser.add_argument('--batch-size', type=int, default=1, help='batch size')
+    parser.add_argument('--batch-size', type=int, default=32, help='batch size')
     parser.add_argument('--half', action='store_true', help='FP16 half-precision export')
     parser.add_argument('--inplace', action='store_true', help='set Detect() inplace=True')
     parser.add_argument('--simplify', action='store_true', help='simplify onnx model')
@@ -32,7 +32,7 @@ if __name__ == '__main__':
     parser.add_argument('--ort', action='store_true', help='export onnx for onnxruntime')
     parser.add_argument('--with-preprocess', action='store_true', help='export bgr2rgb and normalize')
     parser.add_argument('--topk-all', type=int, default=100, help='topk objects for every images')
-    parser.add_argument('--iou-thres', type=float, default=0.4, help='iou threshold for NMS')
+    parser.add_argument('--iou-thres', type=float, default=0.65, help='iou threshold for NMS')
     parser.add_argument('--conf-thres', type=float, default=0.65, help='conf threshold for NMS')
     parser.add_argument('--device', default='0', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
     args = parser.parse_args()
