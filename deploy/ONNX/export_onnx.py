@@ -19,8 +19,8 @@ from io import BytesIO
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--weights', type=str, default='/home/photoneo/YOLOv6_transform_3d/bcs_trained_models/qa_small/yolov6_qa_small_3d_transform.pt', help='weights path')
-    parser.add_argument('--img-size', nargs='+', type=int, default=[480, 480],
+    parser.add_argument('--weights', type=str, default='/home/photoneo/YOLOv6_transform_3d/bcs_trained_models/qa_nano/yolov6_qa_nano_transform_3d.pt', help='weights path')
+    parser.add_argument('--img-size', nargs='+', type=int, default=[256, 480],
                         help='image size, the order is: height width')  # height, width
     parser.add_argument('--batch-size', type=int, default=32, help='batch size')
     parser.add_argument('--half', action='store_true', help='FP16 half-precision export')
@@ -98,7 +98,7 @@ if __name__ == '__main__':
     # ONNX export
     try:
         LOGGER.info('\nStarting to export ONNX...')
-        export_file = args.weights.replace('.pt', '.onnx')  # filename
+        export_file = args.weights.replace('.pt', f'_{args.img_size[1]}_{args.img_size[0]}.onnx')  # filename
         with BytesIO() as f:
             torch.onnx.export(model, img, f, verbose=False, opset_version=13,
                               training=torch.onnx.TrainingMode.EVAL,

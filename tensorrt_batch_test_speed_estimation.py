@@ -1,6 +1,7 @@
 import argparse
 import os
 import time
+import random
 from queue import Queue, Empty
 from threading import Event, Thread
 
@@ -12,13 +13,13 @@ from yolov6.trt_inferer import TrtInferer
 from transform_3D_utils.utils import get_calibration_params, compute_camera_calibration, get_transform_matrix_with_criterion
 from yolov6.utils.events import LOGGER
 
-TIMEOUT = 20
+TIMEOUT = 200
 
 
 def get_args_parser(add_help=True):
     parser = argparse.ArgumentParser(description='Yolov6 3d speed measurement', add_help=add_help)
     parser.add_argument('--trt-model', default="/home/photoneo/YOLOv6_transform_3d/bcs_trained_models/qa_small/yolov6_qa_small_3d_transform-int8-32-16-minmax.trt", type=str, help='model path(s) for inference.')
-    parser.add_argument('--yolo-img-size', nargs='+', type=int, default=[480, 480],
+    parser.add_argument('--yolo-img-size', nargs='+', type=int, default=[544, 960],
                         help='the image-size(h,w) in inference size.')
     parser.add_argument('--img-size', nargs='+', type=int, default=[960, 540],
                         help='The image size (h,w) for inference.')
@@ -138,9 +139,9 @@ def batch_test_video(trt_inferer: TrtInferer,
             bbox_2d, fub = trt_inferer.infer(images)
             gpu_finish_time = (time.time() - gpu_time)
             q_predict.put((bbox_2d, fub))
-
             avg_fps.append(batch_size_processing / gpu_finish_time)
-            print("GPU FPS: {}".format(batch_size_processing / gpu_finish_time))
+            if random.randrange(0, 40) == 1:
+                print("GPU FPS: {}".format(batch_size_processing / gpu_finish_time))
 
     def process():
         while not e_stop.is_set():
@@ -184,16 +185,14 @@ if __name__ == "__main__":
     calib_list = []
     store_results_list = []
     road_mask_list = []
-    video_path = "/home/photoneo/2016-ITS-BrnoCompSpeed/dataset"
-    results_path = "/home/photoneo/2016-ITS-BrnoCompSpeed/results"
 
-    for i in range(4, 7):
-        dir_list = ['session{}_center'.format(i), 'session{}_left'.format(i), 'session{}_right'.format(i)]
-        vid_list.extend([os.path.join(video_path, d, 'video.avi') for d in dir_list])
-        road_mask_list.extend([os.path.join(video_path, d, 'video_mask.png') for d in dir_list])
+    for i in range(6, 7):
+        dir_list = ['session{}_center'.format(i), 'session{}_left'.format(i), ]
+        vid_list.extend([os.path.join(args.root_dir_video_path, d, 'video.avi') for d in dir_list])
+        road_mask_list.extend([os.path.join(args.root_dir_video_path, d, 'video_mask.png') for d in dir_list])
         calib_list.extend(
-            [os.path.join(results_path, d, 'system_SochorCVIU_Edgelets_BBScale_Reg.json') for d in dir_list])
-        store_results_list.extend([os.path.join(results_path, d) for d in dir_list])
+            [os.path.join(args.root_dir_results_path, d, 'system_SochorCVIU_Edgelets_BBScale_Reg.json') for d in dir_list])
+        store_results_list.extend([os.path.join(args.root_dir_results_path, d) for d in dir_list])
 
     trt_inferer = TrtInferer(trt_model=args.trt_model, image_size=args.yolo_img_size, stride=32, half=args.half)
 

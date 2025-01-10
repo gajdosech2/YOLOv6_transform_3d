@@ -109,7 +109,7 @@ venv.bak/
 .vscode/*
 
 #user scripts
-*.sh
+#*.sh
 
 # model files
 *.onnx
@@ -123,3 +123,4 @@ bcs_dataset/
 calib_data/
 debug_pt.jpg
 debug_trt.jpg
+bcs_trained_models/

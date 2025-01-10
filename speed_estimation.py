@@ -1,6 +1,7 @@
 import argparse
 import os
 import time
+import random
 from queue import Queue, Empty
 from threading import Event, Thread
 
@@ -15,7 +16,7 @@ from yolov6.trt_inferer import TrtInferer
 from transform_3D_utils.utils import get_calibration_params, compute_camera_calibration, \
     get_transform_matrix_with_criterion
 
-TIMEOUT = 20
+TIMEOUT = 20000
 
 
 def get_args_parser(add_help=True):
@@ -48,8 +49,8 @@ def load_test_videos(root_dir_video_path: str, root_dir_results_path: str):
     calib_list = []
     store_results_list = []
     road_mask_list = []
-    for i in range(5, 6):
-        dir_list = ['session{}_center'.format(i), 'session{}_left'.format(i), 'session{}_right'.format(i)]
+    for i in range(6, 7):
+        dir_list = ['session{}_center'.format(i), 'session{}_left'.format(i), ]
         vid_list.extend([os.path.join(root_dir_video_path, d, 'video.avi') for d in dir_list])
         road_mask_list.extend([os.path.join(root_dir_video_path, d, 'video_mask.png') for d in dir_list])
         calib_list.extend(
@@ -156,7 +157,8 @@ def batch_process_video(inferer: Inferer,
             q_predict.put((bbox_2d, fub))
             gpu_finish_time = (time.time() - gpu_time)
             avg_fps.append(batch_size_processing / gpu_finish_time)
-            print("GPU FPS: {}".format(batch_size_processing / gpu_finish_time))
+            if random.randrange(0, 100) == 1:
+                print("GPU FPS: {}".format(batch_size_processing / gpu_finish_time))
 
     def process():
         while not e_stop.is_set():

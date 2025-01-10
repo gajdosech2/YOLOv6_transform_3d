@@ -149,14 +149,14 @@ def main():
         help='whether the onnx model is qat; if it is, the int8 calibrator is not needed')
     # If enable int8(not post-QAT model), then set the following
     parser.add_argument('--img-size', nargs='+', type=int,
-                        default=[480, 480], help='image size of model input, the order is: height width')
+                        default=[544, 960], help='image size of model input, the order is: height width')
     parser.add_argument('--batch-size', type=int,
                         default=32, help='batch size for training: default 64')
-    parser.add_argument('--num-calib-batch', default=16, type=int,
+    parser.add_argument('--num-calib-batch', default=32, type=int,
                         help='Number of batches for calibration')
     parser.add_argument('--calib-img-dir', default='../coco/images/train2017', type=str,
                         help='Number of batches for calibration')
-    parser.add_argument('--calib-cache', default='', type=str,
+    parser.add_argument('--calib-cache', default='calibration.cache', type=str,
                         help='Path of calibration cache')
 
     args = parser.parse_args()
