@@ -37,7 +37,7 @@ def get_args_parser(add_help=True):
     parser.add_argument('--video-fps', type=int, default=50, help='Video FPS')
     parser.add_argument('--test-name', type=str, default='yolov6_3d_qarepvgg_23', help='Test name')
     parser.add_argument('--result-dir', type=str, default='', help='Result directory')
-    parser.add_argument('--batch-size-processing', type=int, default=32, help='Batch size for processing')
+    parser.add_argument('--batch-size-processing', type=int, default=8, help='Batch size for processing')
     parser.add_argument('--root_dir_video_path', type=str, default='',
                         help='Root directory of videos. Where are sessions folders located')
     parser.add_argument('--root_dir_results_path', type=str, default='',
@@ -103,12 +103,14 @@ def batch_test_video(trt_inferer: TrtInferer,
                   camera_calib_structure=camera_calibration)
 
     def read_frames():
+        frames_count = 0
         while cap.isOpened() and not e_stop.is_set():
             images = []
             frames = []
             for _ in range(batch_size_processing):
                 ret, frame = cap.read()
-                if not ret or frame is None:
+                frames_count += 1
+                if not ret or frame is None or frames_count > 30000:
                     cap.release()
                     if len(images) > 0:
                         q_images.put(images)

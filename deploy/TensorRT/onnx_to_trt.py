@@ -151,8 +151,8 @@ def main():
     parser.add_argument('--img-size', nargs='+', type=int,
                         default=[544, 960], help='image size of model input, the order is: height width')
     parser.add_argument('--batch-size', type=int,
-                        default=32, help='batch size for training: default 64')
-    parser.add_argument('--num-calib-batch', default=32, type=int,
+                        default=8, help='batch size for training: default 64')
+    parser.add_argument('--num-calib-batch', default=8, type=int,
                         help='Number of batches for calibration')
     parser.add_argument('--calib-img-dir', default='../coco/images/train2017', type=str,
                         help='Number of batches for calibration')

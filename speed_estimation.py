@@ -121,12 +121,14 @@ def batch_process_video(inferer: Inferer,
     e_stop = Event()
 
     def read_frames():
+        frames_count = 0
         while cap.isOpened() and not e_stop.is_set():
             images = []
             frames = []
             for _ in range(batch_size_processing):
                 ret, frame = cap.read()
-                if not ret or frame is None:
+                frames_count += 1
+                if not ret or frame is None or frames_count > 30000:
                     cap.release()
                     if len(images) > 0:
                         q_images.put(images)
@@ -157,7 +159,7 @@ def batch_process_video(inferer: Inferer,
             q_predict.put((bbox_2d, fub))
             gpu_finish_time = (time.time() - gpu_time)
             avg_fps.append(batch_size_processing / gpu_finish_time)
-            if random.randrange(0, 100) == 1:
+            if random.randrange(0, 50) == 1:
                 print("GPU FPS: {}".format(batch_size_processing / gpu_finish_time))
 
     def process():

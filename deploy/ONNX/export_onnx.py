@@ -22,7 +22,7 @@ if __name__ == '__main__':
     parser.add_argument('--weights', type=str, default='/home/photoneo/YOLOv6_transform_3d/bcs_trained_models/qa_nano/yolov6_qa_nano_transform_3d.pt', help='weights path')
     parser.add_argument('--img-size', nargs='+', type=int, default=[256, 480],
                         help='image size, the order is: height width')  # height, width
-    parser.add_argument('--batch-size', type=int, default=32, help='batch size')
+    parser.add_argument('--batch-size', type=int, default=8, help='batch size')
     parser.add_argument('--half', action='store_true', help='FP16 half-precision export')
     parser.add_argument('--inplace', action='store_true', help='set Detect() inplace=True')
     parser.add_argument('--simplify', action='store_true', help='simplify onnx model')
