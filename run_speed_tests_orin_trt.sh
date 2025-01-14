@@ -13,7 +13,7 @@ echo "Nano INT8 480x256 finished..."
 
 
 echo "Running nano distill model INT8 960x544..."
-python3 tensorrt_batch_test_speed_estimation.py --yolo-img-size 544 960 --test-name=yolov6_nano_distill_b32_960_544_int8_orin --trt-model=/home/photoneo/YOLOv6_transform_3d/bcs_trained_models/qa_nano_distill/yolov6_qa_nano_distill_transform_3d_960_544-int8-8-32-minmax.trt --root_dir_video_path /home/photoneo/2016-ITS-BrnoCompSpeed/dataset --root_dir_results_path /home/photoneo/2016-ITS-BrnoCompSpeed/results
+python3 tensorrt_batch_test_speed_estimation.py --yolo-img-size 544 960 --test-name=yolov6_nano_distill_b32_960_544_int8_orin --trt-model=/home/photoneo/YOLOv6_transform_3d/bcs_trained_models/qa_nano_distill/yolov6_qa_nano_distill_transform_3d_960_544-int8-8-8-minmax.trt --root_dir_video_path /home/photoneo/2016-ITS-BrnoCompSpeed/dataset --root_dir_results_path /home/photoneo/2016-ITS-BrnoCompSpeed/results
 echo "Nano distill INT8 960x544 finished..."
 
 echo "Running nano distill model INT8 640x352..."
