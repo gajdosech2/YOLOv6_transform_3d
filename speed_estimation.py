@@ -9,7 +9,6 @@ import cv2
 import numpy as np
 
 from transform_3D_utils.radar import Radar
-# I don't know why but yolov6.core.inferer need to be imported before trt_inferer \_( o.O )_/
 from yolov6.core.inferer import Inferer
 from yolov6.utils.events import LOGGER
 from yolov6.trt_inferer import TrtInferer
@@ -22,8 +21,8 @@ TIMEOUT = 200
 def get_args_parser(add_help=True):
     parser = argparse.ArgumentParser(description='Yolov6 3d speed measurement', add_help=add_help)
     parser.add_argument('--tensorrt', action='store_true', help='If model for inference is TensorRT optimized.')
-    parser.add_argument('--model_path', type=str, default='weights/yolov6s.pt', help='model path(s) for inference.')
-    parser.add_argument('--yolo-img-size', nargs='+', type=int, default=[480, 640],
+    parser.add_argument('--model_path', type=str, default='checkpoints/nano/yolov6_nano_3d_transform.pt', help='model path(s) for inference.')
+    parser.add_argument('--yolo-img-size', nargs='+', type=int, default=[270, 480],
                         help='the image-size(h,w) in inference size.')
     parser.add_argument('--img-size', nargs='+', type=int, default=[960, 540],
                         help='The image size (h,w) for inference.')
@@ -32,7 +31,7 @@ def get_args_parser(add_help=True):
                         help='whether to use FP16 half-precision inference.')
     parser.add_argument('--show-video', action='store_true', help='Show video of inference with 3D bouding boxes.')
     parser.add_argument('--video-fps', type=int, default=50, help='Video FPS')
-    parser.add_argument('--test-name', type=str, default='yolov6_3d_qarepvgg_23', help='Test name')
+    parser.add_argument('--test-name', type=str, default='yolov6_3d_nano', help='Test name')
     parser.add_argument('--result-dir', type=str, default='', help='Result directory')
     parser.add_argument('--processing-batch', type=int, default=32, help='Batch size for processing')
     parser.add_argument('--root_dir_video_path', type=str, default='',

@@ -2,16 +2,10 @@ import os
 import re
 
 def compute_avg_fps_in_subfolders():
-    # Get the current working directory
     results_dir = "/home/photoneo/2016-ITS-BrnoCompSpeed/results/"
-    
-    # Get all subfolders in the current directory
     subfolders = [f.path for f in os.scandir(results_dir) if f.is_dir()]
-    
-    # Dictionary to hold results
     fps_results = {}
-    
-    # Order of substrings for sorting
+
     sort_order = ["nano_b32_480_256_int8", 
                   "nano_b32_640_352_int8",
                   "nano_b32_960_544_int8",
@@ -68,26 +62,18 @@ def compute_avg_fps_in_subfolders():
                   "large_b32_960_544_fp32",
                   ]
     
-    # Process each subfolder
     for subfolder in subfolders:
-        # Get all .txt files in the subfolder
         txt_files = [f for f in os.listdir(subfolder) if f.endswith('.txt')]
-        
-        # Process each .txt file
         for txt_file in txt_files:
-            # Full path to the file
             file_path = os.path.join(subfolder, txt_file)
             
             try:
-                # Read the file and extract the first relevant line
                 with open(file_path, 'r') as file:
                     for line in file:
                         if "Average GPU time:" in line:
-                            # Extract FPS from the line
                             match = re.search(r"Average GPU time:(\d+)", line)
                             if match:
                                 fps = int(match.group(1))
-                                # Record FPS under the subfolder and config file name
                                 if txt_file not in fps_results:
                                     fps_results[txt_file] = []
                                 fps_results[txt_file].append((subfolder, fps))
@@ -95,16 +81,16 @@ def compute_avg_fps_in_subfolders():
             except Exception as e:
                 print(f"Error reading file {file_path}: {e}")
     
-    # Sort the configuration files based on the specified order
+
     def get_sort_key(config_name):
         for i, substr in enumerate(sort_order):
             if substr in config_name:
                 return i
-        return len(sort_order)  # If no substring matches, place it at the end
+        return len(sort_order) 
     
     sorted_configs = sorted(fps_results.items(), key=lambda x: get_sort_key(x[0]))
 
-    # Print the results
+
     for config_file, data in sorted_configs:
         print(f"Configuration File: {config_file}")
         total_fps = 0
