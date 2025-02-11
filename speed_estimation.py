@@ -16,8 +16,8 @@ from yolov6.trt_inferer import TrtInferer
 from transform_3D_utils.utils import get_calibration_params, compute_camera_calibration, \
     get_transform_matrix_with_criterion
 
-TIMEOUT = 20000
 
+TIMEOUT = 200
 
 def get_args_parser(add_help=True):
     parser = argparse.ArgumentParser(description='Yolov6 3d speed measurement', add_help=add_help)
@@ -175,7 +175,7 @@ def batch_process_video(inferer: Inferer,
                 break
             for i, (frame, box, f) in enumerate(zip(frames, bbox_2d, fub)):
                 image_b = radar.process_frame(box, f, frame)
-                cv2.imwrite("/home/photoneo/YOLOv6_transform_3d/debug_pt.jpg", image_b)
+                #cv2.imwrite("/home/g/gajdosech2/YOLOv6_transform_3d/debug_pt.jpg", image_b)
                 if show_video:
                     cv2.imshow('frame', image_b)
                     if cv2.waitKey(1) & 0xFF == ord('q'):
