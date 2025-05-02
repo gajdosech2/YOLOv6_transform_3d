@@ -1,10 +1,12 @@
 import os
-
+import sys
 import cv2
 import numpy as np
 import torch
 import torchvision
 from torchvision.transforms import transforms
+
+sys.path.append("/home/g/gajdosech2/YOLOv6_transform_3d/")
 
 from transform_3D_utils.utils import (
     get_calibration_points,
@@ -60,7 +62,15 @@ class Boxer:
             vanishing_point_2,
             vanishing_point_3,
         ) = self.get_vanishing_points()
-        road_mask = cv2.imread(self.mask_path, cv2.IMREAD_GRAYSCALE)
+
+        if self.mask_path:
+            road_mask = cv2.imread(self.mask_path, cv2.IMREAD_GRAYSCALE)
+        else:
+            road_mask = np.ones((self.image_height, self.image_width, 1), dtype=np.uint8) * 255
+            road_mask[0, :, :] = 0  # Top row
+            road_mask[-1, :, :] = 0  # Bottom row
+            road_mask[:, 0, :] = 0  # Left column
+            road_mask[:, -1, :] = 0  # Right column
 
         # We are just using vanishing point 2 and 3.
         M, IM = get_transform_matrix_with_criterion(
@@ -161,23 +171,58 @@ if __name__ == "__main__":
     except:
         print("Directory already exists")
 
-    for i in range(4):
-        dataset_names.append(f"session{i}_center")
-        dataset_names.append(f"session{i}_left")
-        dataset_names.append(f"session{i}_right")
+    # for i in range(4):
+    #     dataset_names.append(f"session{i}_center")
+    #     dataset_names.append(f"session{i}_left")
+    #     dataset_names.append(f"session{i}_right")
 
-    for dataset_name in dataset_names:
-        print("Starting with dataset: ", dataset_name)
-        saved_images_path = f"../dataset_annotations/{dataset_name}/images"
-        saved_annotation_path = f"../dataset_annotations/{dataset_name}/annotations"
-        video_path: str = f"../dataset/{dataset_name}/video.avi"
-        mask_path: str = f"../dataset/{dataset_name}/video_mask.png"
-        vanishing_point_file: str = (
-            f"../dataset/{dataset_name}/system_SochorCVIU_ManualCalib_ManualScale.json"
-        )
+    # for dataset_name in dataset_names:
+    #     print("Starting with dataset: ", dataset_name)
+    #     saved_images_path = f"../dataset_annotations/{dataset_name}/images"
+    #     saved_annotation_path = f"../dataset_annotations/{dataset_name}/annotations"
+    #     video_path: str = f"../dataset/{dataset_name}/video.avi"
+    #     mask_path: str = f"../dataset/{dataset_name}/video_mask.png"
+    #     vanishing_point_file: str = (
+    #         f"../dataset/{dataset_name}/system_SochorCVIU_ManualCalib_ManualScale.json"
+    #     )
+
+    #     try:
+    #         os.mkdir(f"dataset_annotations/{dataset_name}")
+    #         os.mkdir(saved_images_path)
+    #         os.mkdir(saved_annotation_path)
+    #     except FileExistsError:
+    #         print("Directory already exists")
+
+    #     boxer = Boxer(
+    #         video_path=video_path,
+    #         saved_path_images=saved_images_path,
+    #         saved_path_annotations=saved_annotation_path,
+    #         mask_path=mask_path,
+    #         calibration_file=vanishing_point_file,
+    #         model=model,
+    #     )
+    #     boxer.process_video()
+    #     print("dataset: ", dataset_name, "finished")
+
+    vid_path = '/home/k/kocur15/data/luvizon/dataset/'
+    results_path = '/home/g/gajdosech2/data/luvizon/results/'
+
+    vid_dict = {1: [3, 4], 2: [7, 8, 9, 10, 11], 3: [2], 4: [2]}
+
+    vid_list = []
+    for i in vid_dict.keys():
+        vid_list.extend(
+            [os.path.join(vid_path, 'subset{:02d}'.format(i), 'video{:02d}'.format(j), 'video.h264') for j in
+             vid_dict[i]])
+
+    vanishing_point_file = os.path.join(results_path, 'subset01', 'video01', 'calib.json')
+
+    for video_path in vid_list:
+        saved_images_path = "dataset_annotations/luvizon/images"
+        saved_annotation_path = "dataset_annotations/luvizon/annotations"
 
         try:
-            os.mkdir(f"dataset_annotations/{dataset_name}")
+            os.mkdir("dataset_annotations/luvizon")
             os.mkdir(saved_images_path)
             os.mkdir(saved_annotation_path)
         except FileExistsError:
@@ -187,9 +232,10 @@ if __name__ == "__main__":
             video_path=video_path,
             saved_path_images=saved_images_path,
             saved_path_annotations=saved_annotation_path,
-            mask_path=mask_path,
+            mask_path=None,
             calibration_file=vanishing_point_file,
             model=model,
-        )
+            image_height=1080,
+            image_width=1920
+         )
         boxer.process_video()
-        print("dataset: ", dataset_name, "finished")

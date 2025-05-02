@@ -31,6 +31,8 @@ if __name__ == "__main__":
         dataset_names.append(f"session{i}_left")
         dataset_names.append(f"session{i}_right")
 
+    dataset_names = ["luvizon"]
+
     for ds in dataset_names:
         annotations = os.listdir(f"cleaned_dataset/{ds}/annotations")
         images = os.listdir(f"cleaned_dataset/{ds}/images")

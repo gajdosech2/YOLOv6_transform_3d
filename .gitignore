@@ -123,3 +123,7 @@ bcs_dataset/
 calib_data/
 debug_pt.jpg
 debug_trt.jpg
+
+annotate_dataset/dataset_annotations/
+annotate_dataset/train_val/
+2016-ITS-BrnoCompSpeed*

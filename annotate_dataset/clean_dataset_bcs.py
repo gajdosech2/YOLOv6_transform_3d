@@ -45,6 +45,8 @@ def get_prefix(session):
         return "s6l_"
     elif session == "session6_right":
         return "s6r_"
+    else:
+        return "l_"
 
 
 if __name__ == "__main__":
@@ -52,12 +54,17 @@ if __name__ == "__main__":
     root_cleaned_data_dir = "cleaned_dataset/"
     dataset_names = []
 
+    os.mkdir(root_cleaned_data_dir)
+
     for i in range(7):
         dataset_names.append(f"session{i}_center")
         dataset_names.append(f"session{i}_left")
         dataset_names.append(f"session{i}_right")
 
+    dataset_names = ["luvizon"]
+
     for dataset_name in dataset_names:
+        
         os.mkdir(f"{root_cleaned_data_dir}/{dataset_name}")
         os.mkdir(f"{root_cleaned_data_dir}/{dataset_name}/images")
         os.mkdir(f"{root_cleaned_data_dir}/{dataset_name}/annotations")

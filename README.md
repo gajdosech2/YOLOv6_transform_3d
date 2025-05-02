@@ -99,7 +99,7 @@ To be able to run quantization and TensorRT, you need to install CUDA Toolkit [h
 
 ## Evaluation of Speed Estimation
 
-All our trained models on BrnoCompSpeed dataset are in the ``checkpoints`` directory or alternatively can be downloaded
+All our trained models on BrnoCompSpeed dataset are in the ``checkpoints`` directory (large model exceeds GitHub's file size limit of 100.00 MB) or alternatively can be downloaded
 from [here](https://drive.google.com/file/d/1l729UFXxHdzzTf1yJuJcpYbtrqPEIfPh/view?usp=sharing).
 
 To evaluate speed estimation, you need to use ``eval.py`` from [BrnoCompSpeed/code](https://github.com/JakubSochor/BrnoCompSpeed/tree/master/code) repository.

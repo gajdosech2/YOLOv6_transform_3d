@@ -38,9 +38,32 @@ def get_args_parser(add_help=True):
                         help='Root directory of videos. Where are sessions folders located')
     parser.add_argument('--root_dir_results_path', type=str, default='',
                         help='Root directory of results. For each test the directory will be created')
+    parser.add_argument('--luvizon', action='store_true', help='Test on Luvizon dataset.')
     args = parser.parse_args()
     LOGGER.info(args)
     return args
+
+
+def load_luvizon_videos(root_dir_video_path: str, root_dir_results_path: str):
+    vid_dict = {1: [1, 2], 2: [1, 2, 3, 4, 5, 6], 3: [1], 4: [1], 5: [1]}
+    vid_list = []
+    calib_list = []
+    store_results_list = []
+    road_mask_list = []
+    for i in vid_dict.keys():
+        vid_list.extend(
+            [os.path.join(root_dir_video_path, 'subset{:02d}'.format(i), 'video{:02d}'.format(j), 'video.h264') for j in vid_dict[i]])
+        
+        road_mask_list.extend(
+            ['/home/g/gajdosech2/YOLOv6_transform_3d/annotate_dataset/mask.png' for _ in vid_dict[i]])
+        
+        calib_list.extend(
+            [os.path.join(root_dir_results_path, 'subset01', 'video01', 'calib.json') for _ in vid_dict[i]])
+        
+        store_results_list.extend(
+            [os.path.join(root_dir_results_path, 'subset{:02d}'.format(i), 'video{:02d}/'.format(j)) for j in vid_dict[i]])
+
+    return vid_list, calib_list, store_results_list, road_mask_list
 
 
 def load_test_videos(root_dir_video_path: str, root_dir_results_path: str):
@@ -48,8 +71,8 @@ def load_test_videos(root_dir_video_path: str, root_dir_results_path: str):
     calib_list = []
     store_results_list = []
     road_mask_list = []
-    for i in range(6, 7):
-        dir_list = ['session{}_center'.format(i), 'session{}_left'.format(i), ]
+    for i in range(4, 7):
+        dir_list = ['session{}_center'.format(i), 'session{}_left'.format(i), 'session{}_right'.format(i)]
         vid_list.extend([os.path.join(root_dir_video_path, d, 'video.avi') for d in dir_list])
         road_mask_list.extend([os.path.join(root_dir_video_path, d, 'video_mask.png') for d in dir_list])
         calib_list.extend(
@@ -127,7 +150,7 @@ def batch_process_video(inferer: Inferer,
             for _ in range(batch_size_processing):
                 ret, frame = cap.read()
                 frames_count += 1
-                if not ret or frame is None or frames_count > 30000:
+                if not ret or frame is None:
                     cap.release()
                     if len(images) > 0:
                         q_images.put(images)
@@ -174,7 +197,7 @@ def batch_process_video(inferer: Inferer,
                 break
             for i, (frame, box, f) in enumerate(zip(frames, bbox_2d, fub)):
                 image_b = radar.process_frame(box, f, frame)
-                #cv2.imwrite("/home/g/gajdosech2/YOLOv6_transform_3d/debug_pt.jpg", image_b)
+                cv2.imwrite("/home/g/gajdosech2/YOLOv6_transform_3d/debug_pt.jpg", image_b)
                 if show_video:
                     cv2.imshow('frame', image_b)
                     if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -201,8 +224,14 @@ if __name__ == "__main__":
     args = get_args_parser()
     root_dir_video_path = args.root_dir_video_path
     root_dir_results_path = args.root_dir_results_path
-    vid_list, calib_list, store_results_list, road_mask_list = load_test_videos(root_dir_video_path,
-                                                                                root_dir_results_path)
+
+    if args.luvizon:
+        vid_list, calib_list, store_results_list, road_mask_list = load_luvizon_videos(root_dir_video_path,
+                                                                                       root_dir_results_path)
+    else:
+        vid_list, calib_list, store_results_list, road_mask_list = load_test_videos(root_dir_video_path,
+                                                                                    root_dir_results_path)
+
     if args.model_path.endswith(".trt"):
         inferer = TrtInferer(trt_model=args.model_path, image_size=args.yolo_img_size, half=args.half)
     else:
@@ -212,6 +241,7 @@ if __name__ == "__main__":
                                                                    road_mask_list):
         start_processing = time.time()
         print("Processing: {}".format(vid_path))
+        print(store_results_path)
         batch_process_video(inferer,
                             calib_path,
                             vid_path,

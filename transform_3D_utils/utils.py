@@ -266,6 +266,7 @@ def get_points_from_mask(mask, vanishing_points: tuple):
     """
     _, mask = cv2.threshold(mask, 127, 255, cv2.THRESH_BINARY)
     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2:]
+
     contours = np.array(contours[0][:, 0, :])
 
     # Convex Hull outermost boundary of a set of points in a plane.
