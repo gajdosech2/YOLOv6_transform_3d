@@ -19,8 +19,8 @@ from io import BytesIO
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--weights', type=str, default='/home/photoneo/YOLOv6_transform_3d/bcs_trained_models/qa_small_distill/yolov6_qa_small_distill_transform_3d.pt', help='weights path')
-    parser.add_argument('--img-size', nargs='+', type=int, default=[544, 960],
+    parser.add_argument('--weights', type=str, default='/home/g/gajdosech2/YOLOv6_transform_3d/bcs_trained_models/qa_small/yolov6_qa_small_3d_transform.pt', help='weights path')
+    parser.add_argument('--img-size', nargs='+', type=int, default=[544, 960], #[256, 480] [352, 640] [544, 960]
                         help='image size, the order is: height width')  # height, width
     parser.add_argument('--batch-size', type=int, default=1, help='batch size')
     parser.add_argument('--half', action='store_true', help='FP16 half-precision export')
@@ -34,7 +34,7 @@ if __name__ == '__main__':
     parser.add_argument('--topk-all', type=int, default=100, help='topk objects for every images')
     parser.add_argument('--iou-thres', type=float, default=0.65, help='iou threshold for NMS')
     parser.add_argument('--conf-thres', type=float, default=0.65, help='conf threshold for NMS')
-    parser.add_argument('--device', default='0', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
+    parser.add_argument('--device', default='1', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
     args = parser.parse_args()
     args.img_size *= 2 if len(args.img_size) == 1 else 1  # expand
     print(args)

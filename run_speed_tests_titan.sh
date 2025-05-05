@@ -68,11 +68,11 @@ echo "Running small distill model FP32 960x544..."
 echo "Small FP32 960x544 finished..."
 
 echo "Running small distill model FP32 640x352..."
-python speed_estimation.py --yolo-img-size 352 640 --test-name=yolov6_small_diff_b32_640_352_fp32_titan --model_path=/home/g/gajdosech2/YOLOv6_transform_3d/bcs_trained_models/qa_small_distill/yolov6_qa_small_distill_transform_3d.pt.pt --root_dir_video_path /home/k/kocur15/data/2016-ITS-BrnoCompSpeed/dataset --root_dir_results_path /home/g/gajdosech2/YOLOv6_transform_3d/2016-ITS-BrnoCompSpeed-Titan/results --processing-batch=32
+#python speed_estimation.py --yolo-img-size 352 640 --test-name=yolov6_small_diff_b32_640_352_fp32_titan --model_path=/home/g/gajdosech2/YOLOv6_transform_3d/bcs_trained_models/qa_small_distill/yolov6_qa_small_distill_transform_3d.pt.pt --root_dir_video_path /home/k/kocur15/data/2016-ITS-BrnoCompSpeed/dataset --root_dir_results_path /home/g/gajdosech2/YOLOv6_transform_3d/2016-ITS-BrnoCompSpeed-Titan/results --processing-batch=32
 echo "Small FP32 640x352 finished..."
 
 echo "Running small distill model FP32 480x256..."
-python speed_estimation.py --yolo-img-size 256 480 --test-name=yolov6_small_distill_b32_480_256_fp32_titan --model_path=/home/g/gajdosech2/YOLOv6_transform_3d/bcs_trained_models/qa_small_distill/yolov6_qa_small_distill_transform_3d.pt.pt --root_dir_video_path /home/k/kocur15/data/2016-ITS-BrnoCompSpeed/dataset --root_dir_results_path /home/g/gajdosech2/YOLOv6_transform_3d/2016-ITS-BrnoCompSpeed-Titan/results --processing-batch=32
+#python speed_estimation.py --yolo-img-size 256 480 --test-name=yolov6_small_distill_b32_480_256_fp32_titan --model_path=/home/g/gajdosech2/YOLOv6_transform_3d/bcs_trained_models/qa_small_distill/yolov6_qa_small_distill_transform_3d.pt.pt --root_dir_video_path /home/k/kocur15/data/2016-ITS-BrnoCompSpeed/dataset --root_dir_results_path /home/g/gajdosech2/YOLOv6_transform_3d/2016-ITS-BrnoCompSpeed-Titan/results --processing-batch=32
 echo "Small FP32 480x256 finished..."
 
 
@@ -95,11 +95,11 @@ echo "Running medium model FP32 960x544..."
 echo "Medium FP32 960x544 finished..."
 
 echo "Running medium model FP32 640x352..."
-python speed_estimation.py --yolo-img-size 352 640 --test-name=yolov6_medium_b32_640_352_fp32_titan --model_path=/home/g/gajdosech2/YOLOv6_transform_3d/bcs_trained_models/qa_medium/yolov6_qa_medium_3d_transform.pt --root_dir_video_path /home/k/kocur15/data/2016-ITS-BrnoCompSpeed/dataset --root_dir_results_path /home/g/gajdosech2/YOLOv6_transform_3d/2016-ITS-BrnoCompSpeed-Titan/results --processing-batch=32
+#python speed_estimation.py --yolo-img-size 352 640 --test-name=yolov6_medium_b32_640_352_fp32_titan --model_path=/home/g/gajdosech2/YOLOv6_transform_3d/bcs_trained_models/qa_medium/yolov6_qa_medium_3d_transform.pt --root_dir_video_path /home/k/kocur15/data/2016-ITS-BrnoCompSpeed/dataset --root_dir_results_path /home/g/gajdosech2/YOLOv6_transform_3d/2016-ITS-BrnoCompSpeed-Titan/results --processing-batch=32
 echo "Medium FP32 640x352 finished..."
 
 echo "Running medium model FP32 480x256..."
-python speed_estimation.py --yolo-img-size 256 480 --test-name=yolov6_medium_b32_480_256_fp32_titan --model_path=/home/g/gajdosech2/YOLOv6_transform_3d/bcs_trained_models/qa_medium/yolov6_qa_medium_3d_transform.pt --root_dir_video_path /home/k/kocur15/data/2016-ITS-BrnoCompSpeed/dataset --root_dir_results_path /home/g/gajdosech2/YOLOv6_transform_3d/2016-ITS-BrnoCompSpeed-Titan/results --processing-batch=32
+#python speed_estimation.py --yolo-img-size 256 480 --test-name=yolov6_medium_b32_480_256_fp32_titan --model_path=/home/g/gajdosech2/YOLOv6_transform_3d/bcs_trained_models/qa_medium/yolov6_qa_medium_3d_transform.pt --root_dir_video_path /home/k/kocur15/data/2016-ITS-BrnoCompSpeed/dataset --root_dir_results_path /home/g/gajdosech2/YOLOv6_transform_3d/2016-ITS-BrnoCompSpeed-Titan/results --processing-batch=32
 echo "Medium FP32 480x256 finished..."
 
 
@@ -121,10 +121,63 @@ echo "Running large model FP32 960x544..."
 echo "Large FP32 960x544 finished..."
 
 echo "Running large model FP32 640x352..."
-python speed_estimation.py --yolo-img-size 352 640 --test-name=yolov6_large_b32_640_352_fp32_titan --model_path=/home/g/gajdosech2/YOLOv6_transform_3d/bcs_trained_models/large/yolov6_large_3d_transform.pt --root_dir_video_path /home/k/kocur15/data/2016-ITS-BrnoCompSpeed/dataset --root_dir_results_path /home/g/gajdosech2/YOLOv6_transform_3d/2016-ITS-BrnoCompSpeed-Titan/results --processing-batch=32
+#python speed_estimation.py --yolo-img-size 352 640 --test-name=yolov6_large_b32_640_352_fp32_titan --model_path=/home/g/gajdosech2/YOLOv6_transform_3d/bcs_trained_models/large/yolov6_large_3d_transform.pt --root_dir_video_path /home/k/kocur15/data/2016-ITS-BrnoCompSpeed/dataset --root_dir_results_path /home/g/gajdosech2/YOLOv6_transform_3d/2016-ITS-BrnoCompSpeed-Titan/results --processing-batch=32
 echo "Large FP32 640x352 finished..."
 
 echo "Running large model FP32 480x256..."
-python speed_estimation.py --yolo-img-size 256 480 --test-name=yolov6_large_b32_480_256_fp32_titan --model_path=/home/g/gajdosech2/YOLOv6_transform_3d/bcs_trained_models/large/yolov6_large_3d_transform.pt --root_dir_video_path /home/k/kocur15/data/2016-ITS-BrnoCompSpeed/dataset --root_dir_results_path /home/g/gajdosech2/YOLOv6_transform_3d/2016-ITS-BrnoCompSpeed-Titan/results --processing-batch=32
+#python speed_estimation.py --yolo-img-size 256 480 --test-name=yolov6_large_b32_480_256_fp32_titan --model_path=/home/g/gajdosech2/YOLOv6_transform_3d/bcs_trained_models/large/yolov6_large_3d_transform.pt --root_dir_video_path /home/k/kocur15/data/2016-ITS-BrnoCompSpeed/dataset --root_dir_results_path /home/g/gajdosech2/YOLOv6_transform_3d/2016-ITS-BrnoCompSpeed-Titan/results --processing-batch=32
 echo "Large FP32 480x256 finished..."
+
+
+
+echo "Running nano model onnx to trt 480x256..."
+python3 /home/g/gajdosech2/YOLOv6_transform_3d/deploy/TensorRT/onnx_to_trt.py --img-size 256 480 --model /home/g/gajdosech2/YOLOv6_transform_3d/bcs_trained_models/qa_nano/yolov6_qa_nano_transform_3d_480_256.onnx --dtype int8 --calib-img-dir /home/g/gajdosech2/data/bcs_dataset/images/test --verbose
+echo "Nano 480x256 finished..."
+
+echo "Running nano model onnx to trt 640x352..."
+python3 /home/g/gajdosech2/YOLOv6_transform_3d/deploy/TensorRT/onnx_to_trt.py --img-size 352 640 --model /home/g/gajdosech2/YOLOv6_transform_3d/bcs_trained_models/qa_nano/yolov6_qa_nano_transform_3d_640_352.onnx --dtype int8 --calib-img-dir /home/g/gajdosech2/data/bcs_dataset/images/test --verbose
+echo "Nano 640x352 finished..."
+
+echo "Running nano model onnx to trt 960x544..."
+python3 /home/g/gajdosech2/YOLOv6_transform_3d/deploy/TensorRT/onnx_to_trt.py --img-size 544 960 --model /home/g/gajdosech2/YOLOv6_transform_3d/bcs_trained_models/qa_nano/yolov6_qa_nano_transform_3d_960_544.onnx --dtype int8 --calib-img-dir /home/g/gajdosech2/data/bcs_dataset/images/test --verbose
+echo "Nano 960x544 finished..."
+
+
+echo "Running small model onnx to trt 480x256..."
+python3 /home/g/gajdosech2/YOLOv6_transform_3d/deploy/TensorRT/onnx_to_trt.py --img-size 256 480 --model /home/g/gajdosech2/YOLOv6_transform_3d/bcs_trained_models/qa_small/yolov6_qa_small_3d_transform_480_256.onnx --dtype int8 --calib-img-dir /home/g/gajdosech2/data/bcs_dataset/images/test --verbose
+echo "Small 480x256 finished..."
+
+echo "Running small model onnx to trt 640x352..."
+python3 /home/g/gajdosech2/YOLOv6_transform_3d/deploy/TensorRT/onnx_to_trt.py --img-size 352 640 --model /home/g/gajdosech2/YOLOv6_transform_3d/bcs_trained_models/qa_small/yolov6_qa_small_3d_transform_640_352.onnx --dtype int8 --calib-img-dir /home/g/gajdosech2/data/bcs_dataset/images/test --verbose
+echo "Small 640x352 finished..."
+
+echo "Running small model onnx to trt 960x544..."
+python3 /home/g/gajdosech2/YOLOv6_transform_3d/deploy/TensorRT/onnx_to_trt.py --img-size 544 960 --model /home/g/gajdosech2/YOLOv6_transform_3d/bcs_trained_models/qa_small/yolov6_qa_small_3d_transform_960_544.onnx --dtype int8 --calib-img-dir /home/g/gajdosech2/data/bcs_dataset/images/test --verbose
+echo "Small 960x544 finished..."
+
+
+echo "Running nano model INT8 960x544..."
+#python3 tensorrt_estimation.py --yolo-img-size 544 960 --test-name=yolov6_nano_b32_960_544_int8_titan --trt-model=/ --root_dir_video_path /home/k/kocur15/data/2016-ITS-BrnoCompSpeed/dataset --root_dir_results_path /home/g/gajdosech2/YOLOv6_transform_3d/2016-ITS-BrnoCompSpeed-Titan/result
+echo "Nano INT8 960x544 finished..."
+
+echo "Running nano model INT8 640x352..."
+#python3 tensorrt_estimation.py --yolo-img-size 352 640 --test-name=yolov6_nano_b32_640_352_int8_titan --trt-model=/ --root_dir_video_path /home/k/kocur15/data/2016-ITS-BrnoCompSpeed/dataset --root_dir_results_path /home/g/gajdosech2/YOLOv6_transform_3d/2016-ITS-BrnoCompSpeed-Titan/result
+echo "Nano INT8 640x352 finished..."
+
+echo "Running nano model INT8 480x256..."
+#python3 tensorrt_estimation.py --yolo-img-size 256 480 --test-name=yolov6_nano_b32_480_256_int8_titan --trt-model=/ --root_dir_video_path /home/k/kocur15/data/2016-ITS-BrnoCompSpeed/dataset --root_dir_results_path /home/g/gajdosech2/YOLOv6_transform_3d/2016-ITS-BrnoCompSpeed-Titan/result
+echo "Nano INT8 480x256 finished..."
+
+
+echo "Running small model INT8 960x544..."
+#python3 tensorrt_estimation.py --yolo-img-size 544 960 --test-name=yolov6_small_b32_960_544_int8_titan --trt-model=/ --root_dir_video_path /home/k/kocur15/data/2016-ITS-BrnoCompSpeed/dataset --root_dir_results_path /home/g/gajdosech2/YOLOv6_transform_3d/2016-ITS-BrnoCompSpeed-Titan/result
+echo "Small INT8 960x544 finished..."
+
+echo "Running small model INT8 640x352..."
+#python3 tensorrt_estimation.py --yolo-img-size 352 640 --test-name=yolov6_small_b32_640_352_int8_titan --trt-model=/ --root_dir_video_path /home/k/kocur15/data/2016-ITS-BrnoCompSpeed/dataset --root_dir_results_path /home/g/gajdosech2/YOLOv6_transform_3d/2016-ITS-BrnoCompSpeed-Titan/result
+echo "Small INT8 640x352 finished..."
+
+echo "Running small model INT8 480x256..."
+#python3 tensorrt_estimation.py --yolo-img-size 256 480 --test-name=yolov6_small_b32_480_256_int8_titan --trt-model=/ --root_dir_video_path /home/k/kocur15/data/2016-ITS-BrnoCompSpeed/dataset --root_dir_results_path /home/g/gajdosech2/YOLOv6_transform_3d/2016-ITS-BrnoCompSpeed-Titan/result
+echo "Small INT8 480x256 finished..."
 
