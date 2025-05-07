@@ -167,7 +167,7 @@ if __name__ == "__main__":
 
     dataset_names = []
     try:
-        os.mkdir(f"dataset_annotations")
+        os.mkdir(f"dataset_annotations_small")
     except:
         print("Directory already exists")
 
@@ -207,6 +207,7 @@ if __name__ == "__main__":
     vid_path = '/home/k/kocur15/data/luvizon/dataset/'
     results_path = '/home/g/gajdosech2/data/luvizon/results/'
 
+    #vid_dict = {1: [2, 3, 4], 2: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 3: [2], 4: [2]}
     vid_dict = {1: [3, 4], 2: [7, 8, 9, 10, 11], 3: [2], 4: [2]}
 
     vid_list = []
@@ -218,11 +219,12 @@ if __name__ == "__main__":
     vanishing_point_file = os.path.join(results_path, 'subset01', 'video01', 'calib.json')
 
     for video_path in vid_list:
-        saved_images_path = "dataset_annotations/luvizon/images"
-        saved_annotation_path = "dataset_annotations/luvizon/annotations"
+        print(video_path)
+        saved_images_path = "dataset_annotations_small/luvizon/images"
+        saved_annotation_path = "dataset_annotations_small/luvizon/annotations"
 
         try:
-            os.mkdir("dataset_annotations/luvizon")
+            os.mkdir("dataset_annotations_small/luvizon")
             os.mkdir(saved_images_path)
             os.mkdir(saved_annotation_path)
         except FileExistsError:

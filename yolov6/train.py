@@ -24,7 +24,7 @@ from yolov6.utils.general import increment_name, find_latest_checkpoint
 def get_args_parser(add_help=True):
     parser = argparse.ArgumentParser(description='YOLOv6 PyTorch Training', add_help=add_help)
     parser.add_argument('--data-path', default='./data/coco.yaml', type=str, help='path of dataset')
-    parser.add_argument('--conf-file', default='./configs/yolov6n.py', type=str, help='experiments description file')
+    parser.add_argument('--conf-file', default='./configs/yolov6s.py', type=str, help='experiments description file')
     parser.add_argument('--img-size', default=640, type=int, help='train, val image size (pixels)')
     parser.add_argument('--batch-size', default=32, type=int, help='total batch size for all GPUs')
     parser.add_argument('--epochs', default=400, type=int, help='number of total epochs to run')

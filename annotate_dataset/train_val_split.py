@@ -38,8 +38,8 @@ if __name__ == "__main__":
         images = os.listdir(f"cleaned_dataset/{ds}/images")
         sorted_annotations = sorted(annotations)
         sorted_images = sorted(images)
-        train_split_ratio = 0.8
-        val_split_ratio = 0.2
+        train_split_ratio = 0.98
+        val_split_ratio = 0.02
         train_split = int(len(sorted_annotations) * train_split_ratio)
         val_split = int(len(sorted_annotations) * val_split_ratio)
         # val split

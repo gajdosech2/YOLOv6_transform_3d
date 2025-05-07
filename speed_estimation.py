@@ -27,6 +27,7 @@ def get_args_parser(add_help=True):
     parser.add_argument('--img-size', nargs='+', type=int, default=[960, 540],
                         help='The image size (h,w) for inference.')
     parser.add_argument('--iou-thres', type=float, default=0.65, help='NMS IoU threshold for inference.')
+    parser.add_argument('--conf-thres', type=float, default=0.65, help='Conf threshold for inference.')
     parser.add_argument('--half', action='store_true',
                         help='whether to use FP16 half-precision inference.')
     parser.add_argument('--show-video', action='store_true', help='Show video of inference with 3D bouding boxes.')
@@ -45,7 +46,7 @@ def get_args_parser(add_help=True):
 
 
 def load_luvizon_videos(root_dir_video_path: str, root_dir_results_path: str):
-    vid_dict = {1: [1, 2], 2: [1, 2, 3, 4, 5, 6], 3: [1], 4: [1], 5: [1]}
+    vid_dict = {1: [1], 2: [1], 3: [1], 4: [1], 5: [1]}
     vid_list = []
     calib_list = []
     store_results_list = []
@@ -137,9 +138,9 @@ def batch_process_video(inferer: Inferer,
     else:
         lambda_inferer = lambda images: inferer.simple_inference(images, conf_threshold, iou_threshold)
 
-    q_frames = Queue(batch_size_processing)
-    q_images = Queue(batch_size_processing)
-    q_predict = Queue(batch_size_processing)
+    q_frames = Queue()
+    q_images = Queue()
+    q_predict = Queue()
     e_stop = Event()
 
     def read_frames():
@@ -170,10 +171,10 @@ def batch_process_video(inferer: Inferer,
             try:
                 images = q_images.get(timeout=TIMEOUT)
                 if images is None:
-                    e_stop.set()
+                    #e_stop.set()
                     break
             except Empty:
-                e_stop.set()
+                #e_stop.set()
                 break
             gpu_time = time.time()
             images = np.stack(images, axis=0)
@@ -188,16 +189,16 @@ def batch_process_video(inferer: Inferer,
         while not e_stop.is_set():
             try:
                 frames = q_frames.get(timeout=TIMEOUT)
-                bbox_2d, fub = q_predict.get(timeout=TIMEOUT)
-                if frames is None:
+                if frames is None or len(frames) == 0:
                     e_stop.set()
                     break
+                bbox_2d, fub = q_predict.get(timeout=TIMEOUT)
             except Empty:
                 e_stop.set()
                 break
             for i, (frame, box, f) in enumerate(zip(frames, bbox_2d, fub)):
                 image_b = radar.process_frame(box, f, frame)
-                cv2.imwrite("/home/g/gajdosech2/YOLOv6_transform_3d/debug_pt.jpg", image_b)
+                #cv2.imwrite(f"/home/g/gajdosech2/YOLOv6_transform_3d/debug/{counter}.jpg", image_b)
                 if show_video:
                     cv2.imshow('frame', image_b)
                     if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -214,6 +215,7 @@ def batch_process_video(inferer: Inferer,
     reader.join()
     predictor.join()
     processor.join()
+    radar.write_record()
     mean_fps = int(np.mean(avg_fps))
     with open(os.path.join(result_dir, 'avg_fps_' + test_name + '.txt'), 'a') as f:
         f.write("Average GPU time:" + str(mean_fps) + ", for " + video_path + "\n")
@@ -253,5 +255,6 @@ if __name__ == "__main__":
                             args.show_video,
                             args.processing_batch,
                             args.video_fps,
-                            args.iou_thres)
+                            args.iou_thres,
+                            args.conf_thres)
         print("Finished. Processing time: {}".format(time.time() - start_processing))
