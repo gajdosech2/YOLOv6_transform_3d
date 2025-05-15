@@ -138,9 +138,9 @@ def batch_process_video(inferer: Inferer,
     else:
         lambda_inferer = lambda images: inferer.simple_inference(images, conf_threshold, iou_threshold)
 
-    q_frames = Queue()
-    q_images = Queue()
-    q_predict = Queue()
+    q_frames = Queue(32)
+    q_images = Queue(32)
+    q_predict = Queue(32)
     e_stop = Event()
 
     def read_frames():

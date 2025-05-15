@@ -305,13 +305,13 @@ if __name__ == "__main__":
         vid_path = '/home/k/kocur15/data/luvizon/dataset/'
         results_path = '/home/g/gajdosech2/data/luvizon/results/'
 
-    vid_dict = {1: [1, 2], 2: [1, 2, 3, 4, 5, 6], 3: [1], 4: [1], 5: [1]}
-    vid_dict = {1: [1, 2]}
-    # vid_dict = {1: [1], 2: [1], 3: [1], 4: [1], 5: [1]}
+    # vid_dict = {1: [1, 2], 2: [1, 2, 3, 4, 5, 6], 3: [1], 4: [1], 5: [1]}
+    # vid_dict = {1: [1, 2]}
+    vid_dict = {1: [1], 2: [1], 3: [1], 4: [1], 5: [1]}
     # name = 'system_Transform3D_BCL_0.5_960_540_VP2VP3.json'
     # name = 'system_Transform3D_960_540_VP2VP3.json'
     # name = 'system_Transform3D_BCL_0.5_640_360_VP2VP3.json'
-    name = 'system_yolov6_nano_b32_960_544_fp16_luvizon.json'
+    name = 'system_yolov6_small_b32_640_352_fp32_luvizon_retrained.json'
 
     # name = 'system_Transform3D_960_540_VP2VP3.json'
     # vid_dict = {1: [1, 2, 3, 4], 2: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 3: [1, 2], 4: [1, 2], 5: [1]}
