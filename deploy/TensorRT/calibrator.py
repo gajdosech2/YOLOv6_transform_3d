@@ -51,6 +51,7 @@ class Calibrator(trt.IInt8EntropyCalibrator2):
 
     def read_calibration_cache(self):
         # If there is a cache, use it instead of calibrating again. Otherwise, implicitly return None.
+        return None
         if os.path.exists(self.cache_file):
             with open(self.cache_file, "rb") as f:
                 logger.info("Using calibration cache to save time: {:}".format(self.cache_file))

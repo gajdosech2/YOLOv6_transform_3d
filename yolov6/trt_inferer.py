@@ -114,7 +114,8 @@ class TrtInferer:
         # Copy to host
         output = [self.bindings[n].data for n in self.bindings.keys()]
         pred_results = (output[2], output[1])
-        det, fub = non_max_suppression(pred_results, 0.65, 0.55, max_det=1000)
+        
+        det, fub = non_max_suppression(pred_results, 0.65, 0.65, max_det=1000)
 
         for i in range(len(det)):
             if len(det[i]):

@@ -86,9 +86,9 @@ def batch_test_video(trt_inferer: TrtInferer,
         borderMode=cv2.BORDER_CONSTANT,
     )
 
-    q_frames = Queue(batch_size_processing)
-    q_images = Queue(batch_size_processing)
-    q_predict = Queue(batch_size_processing)
+    q_frames = Queue(32)
+    q_images = Queue(32)
+    q_predict = Queue(32)
     e_stop = Event()
 
     radar = Radar(transform_matrix=M,
@@ -110,7 +110,7 @@ def batch_test_video(trt_inferer: TrtInferer,
             for _ in range(batch_size_processing):
                 ret, frame = cap.read()
                 frames_count += 1
-                if not ret or frame is None or frames_count > 30000:
+                if not ret or frame is None:
                     cap.release()
                     if len(images) > 0:
                         q_images.put(images)
@@ -130,15 +130,16 @@ def batch_test_video(trt_inferer: TrtInferer,
             try:
                 images = q_images.get(timeout=TIMEOUT)
                 if images is None:
-                    e_stop.set()
+                    #e_stop.set()
                     break
             except Empty:
-                e_stop.set()
+                #e_stop.set()
                 break
 
             images = np.stack(images, axis=0)
             gpu_time = time.time()
             bbox_2d, fub = trt_inferer.infer(images)
+            #print(bbox_2d)
             gpu_finish_time = (time.time() - gpu_time)
             q_predict.put((bbox_2d, fub))
             avg_fps.append(batch_size_processing / gpu_finish_time)
@@ -149,16 +150,16 @@ def batch_test_video(trt_inferer: TrtInferer,
         while not e_stop.is_set():
             try:
                 frames = q_frames.get(timeout=TIMEOUT)
-                bbox_2d, fub = q_predict.get(timeout=TIMEOUT)
                 if frames is None:
                     e_stop.set()
                     break
+                bbox_2d, fub = q_predict.get(timeout=TIMEOUT)
             except Empty:
                 e_stop.set()
                 break
             for i, (frame, box, f) in enumerate(zip(frames, bbox_2d, fub)):
                 image_b = radar.process_frame(box, f, frame)
-                #cv2.imwrite("/home/photoneo/YOLOv6_transform_3d/debug_trt.jpg", image_b)
+                #cv2.imwrite("/home/g/gajdosech2/YOLOv6_transform_3d/debug_trt.jpg", image_b)
                 if show_video:
                     cv2.imshow('frame', image_b)
                     if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -175,6 +176,7 @@ def batch_test_video(trt_inferer: TrtInferer,
     reader.join()
     predictor.join()
     processor.join()
+    radar.write_record()
     mean_fps = int(np.mean(avg_fps))
     with open(os.path.join(result_dir, 'avg_fps_' + test_name + '.txt'), 'a') as f:
         f.write("Average GPU time:" + str(mean_fps) + ", for " + video_path + "\n")
@@ -187,9 +189,9 @@ if __name__ == "__main__":
     calib_list = []
     store_results_list = []
     road_mask_list = []
-
-    for i in range(6, 7):
-        dir_list = ['session{}_center'.format(i), 'session{}_left'.format(i), ]
+    
+    for i in range(4, 7):
+        dir_list = ['session{}_center'.format(i), 'session{}_left'.format(i), 'session{}_right'.format(i)]
         vid_list.extend([os.path.join(args.root_dir_video_path, d, 'video.avi') for d in dir_list])
         road_mask_list.extend([os.path.join(args.root_dir_video_path, d, 'video_mask.png') for d in dir_list])
         calib_list.extend(
